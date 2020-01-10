@@ -1,0 +1,19 @@
+{
+  "name": "pool_a_truck",
+  "version": "1.0.0",
+  "description": "Pool a truck",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theIYD/pool_a_truck.git"
+  },
+  "author": "CodeSquad",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/theIYD/pool_a_truck/issues"
+  },
+  "homepage": "https://github.com/theIYD/pool_a_truck#readme"
+}
