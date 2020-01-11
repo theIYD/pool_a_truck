@@ -10,9 +10,10 @@ const googleMapsClient = require("@google/maps").createClient({
     Step 1: We create the base path of the truck using the Directions API
     Step 2: This path contains the general polyline which is sent to the server & is stored
     Step 3: On every delivery request, the location (coordinates) of the farmer is checked if it is near to the base path
-    Step 4: If yes, we add the request to our truck journey & subtract the recalculate the capacity of our truck
+    Step 4: If yes, we add the request to our truck journey & recalculate the capacity of our truck
     Step 5: Make these coordinates as `waypoints`
     Step 6: Recompute the best path
+    Step 7: Send this path back to the client
 */
 
 let polyline = "";
