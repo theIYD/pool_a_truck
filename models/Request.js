@@ -12,7 +12,10 @@ const requestSchema = new Schema({
     lng: { type: Number, required: true }
   },
   capacity: { type: Number, required: true },
-  departure: { type: Date, required: true },
+  departure: {
+    start: { type: Date, required: true },
+    end: { type: Date, required: true }
+  },
   created_at: { type: Date, default: Date.now() }
 });
 

@@ -11,7 +11,8 @@ exports.createRequest = async (req, res, next) => {
     destLat,
     destLng,
     capacity,
-    departure
+    departureStart,
+    departureEnd
   } = req.body;
   const { userId } = req.query;
 
@@ -27,7 +28,10 @@ exports.createRequest = async (req, res, next) => {
         lng: destLng
       },
       capacity,
-      departure: moment(departure).format("x")
+      departure: {
+        start: moment(departureStart).format("x"),
+        end: moment(departureEnd).format("x")
+      }
     });
 
     const saveRequest = await newRequest.save();
