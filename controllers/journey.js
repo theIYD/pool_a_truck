@@ -32,6 +32,7 @@ exports.createJourney = async (req, res, next) => {
   }
 };
 
+// Get best journeys
 exports.getBestJourneys = async (req, res, next) => {
   const capacityRequired = req.body.capacityRequired;
 
