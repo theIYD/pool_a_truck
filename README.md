@@ -31,6 +31,7 @@ Gets a list of journeys near the source location of the farmer
 ```
 
 #### `POST /user`
+
 ```
 FormData:
 - name
@@ -39,7 +40,17 @@ FormData:
 Creates a user in db
 ```
 
+#### `POST /login`
+
+```
+FormData:
+- phone
+
+Logs in a user
+```
+
 #### `POST /vehicle`
+
 ```
 FormData:
 - type (Tata)
@@ -48,6 +59,7 @@ Creates a new vehicle in db
 ```
 
 #### `POST /request`
+
 ```
 FormData:
 - sourceLat

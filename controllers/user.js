@@ -15,3 +15,17 @@ exports.createUser = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.login = async (req, res, next) => {
+  const { phone } = req.body;
+  try {
+    const user = await User.findOne({ phone });
+    if (user) {
+      return res.status(200).json({ error: 0, user });
+    } else {
+      res.status(200).json({ error: 0, message: "User not found" });
+    }
+  } catch (err) {
+    next(err);
+  }
+};

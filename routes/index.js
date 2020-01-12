@@ -12,6 +12,9 @@ router.route("/journey").post(upload.none(), journeyController.createJourney);
 // Create a new user
 router.route("/user").post(upload.none(), userController.createUser);
 
+// Logs in a user
+router.route("/login").post(upload.none(), userController.login);
+
 // Create a new vehicle
 router.route("/vehicle").post(upload.none(), vehicleController.createVehicle);
 
