@@ -14,4 +14,7 @@ router.route("/user").post(upload.none(), userController.createUser);
 // Create a new vehicle
 router.route("/vehicle").post(upload.none(), vehicleController.createVehicle);
 
+// Get closest journeys
+router.route("/journeys").get(upload.none(), journeyController.getBestJourneys);
+
 module.exports = router;

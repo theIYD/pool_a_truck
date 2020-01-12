@@ -12,6 +12,7 @@ const journeySchema = new Schema({
     lng: { type: Number, required: true }
   },
   departure: { type: Date, required: true },
+  polyline: { type: String, required: true },
   vehicle: { type: mongoose.Types.ObjectId, required: true, ref: "Vehicle" },
   capacityAvailable: { type: Number, required: true, min: 0 },
   waypoints: [Object],
