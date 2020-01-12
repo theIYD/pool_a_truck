@@ -21,6 +21,8 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "google-maps-polyutil": "^1.0.3",
-    "mongoose": "^5.8.6"
+    "moment": "^2.24.0",
+    "mongoose": "^5.8.6",
+    "multer": "^1.4.2"
   }
 }

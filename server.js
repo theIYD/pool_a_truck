@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
+const errorHandler = require("./middlewares/error");
 const app = express();
 
 const routes = require("./routes/index");
@@ -23,6 +24,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", routes);
+
+// Error middleware
+app.use(errorHandler);
 
 let port = process.env.PORT || 3100;
 app.listen(port, () => console.log(`Server listening on port ${port}`));

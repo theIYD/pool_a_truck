@@ -5,7 +5,8 @@ const userSchema = new Schema({
   name: String,
   phone: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   journeys: [{ type: String, ref: "Journey" }],
   created_at: { type: Date, default: Date.now() }
