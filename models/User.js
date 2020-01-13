@@ -8,7 +8,7 @@ const userSchema = new Schema({
     required: true,
     unique: true
   },
-  journeys: [{ type: String, ref: "Journey" }],
+  journeys: [{ type: mongoose.Types.ObjectId, ref: "Journey" }],
   created_at: { type: Date, default: Date.now() }
 });
 

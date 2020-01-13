@@ -3,6 +3,7 @@ const moment = require("moment");
 
 const Journey = require("../models/Journey");
 const Request = require("../models/Request");
+const User = require("../models/User");
 const distance = require("../helpers/distance");
 
 // Create a new journey
@@ -85,7 +86,7 @@ exports.acceptRequest = async (req, res, next) => {
           waypoints: {
             $each: [
               { latitude: request.start.lat, longitude: request.start.lng }
-              //   { latitude: request.end.lat, longitude: request.end.lng } For destination
+              //   { latitude: request.end.lat, longitude: request.end.lng } For drop-off point before the journey destination
             ]
           }
         },
@@ -97,7 +98,20 @@ exports.acceptRequest = async (req, res, next) => {
     );
 
     if (updateJourney) {
-      res.status(200).json({ error: 0, journey: updateJourney });
+      const updateJourneyOfUser = await User.findOneAndUpdate(
+        {
+          _id: request.userId
+        },
+        {
+          $push: {
+            journeys: mongoose.Types.ObjectId(journeyId)
+          }
+        },
+        { new: true }
+      );
+      if (updateJourneyOfUser) {
+        res.status(200).json({ error: 0, journey: updateJourney });
+      }
     }
   } catch (err) {
     next(err);
