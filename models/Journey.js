@@ -18,14 +18,22 @@ const journeySchema = new Schema({
   waypoints: [Object],
   requested_by: [
     {
-      userId: { type: mongoose.Types.ObjectId, required: false, ref: "User" },
+      requestId: {
+        type: mongoose.Types.ObjectId,
+        required: false,
+        ref: "Request"
+      },
       capacityRequired: { type: Number, required: false },
       created_at: { type: Date, default: Date.now() }
     }
   ],
   accepted_requests: [
     {
-      userId: { type: mongoose.Types.ObjectId, required: false, ref: "User" },
+      requestId: {
+        type: mongoose.Types.ObjectId,
+        required: false,
+        ref: "Request"
+      },
       capacityRequired: { type: Number, required: false },
       created_at: { type: Date }
     }

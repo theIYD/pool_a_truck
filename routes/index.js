@@ -8,6 +8,9 @@ const requestController = require("../controllers/request");
 
 // Create a journey
 router.route("/journey").post(upload.none(), journeyController.createJourney);
+router
+  .route("/journey/accept")
+  .post(upload.none(), journeyController.acceptRequest);
 
 // Create a new user
 router.route("/user").post(upload.none(), userController.createUser);

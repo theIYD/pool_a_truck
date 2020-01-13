@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const moment = require("moment");
 
 const Journey = require("../models/Journey");
+const Request = require("../models/Request");
 const distance = require("../helpers/distance");
 
 // Create a new journey
@@ -60,6 +61,44 @@ exports.getBestJourneys = async (req, res, next) => {
         .json({ error: 0, message: "No journeys found near you" });
     }
     res.status(200).json({ error: 0, journeys: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Accept request for a particular journey
+exports.acceptRequest = async (req, res, next) => {
+  const { requestId, journeyId } = req.query;
+
+  try {
+    const request = await Request.findById(requestId);
+    const updateJourney = await Journey.findOneAndUpdate(
+      { _id: journeyId },
+      {
+        $push: {
+          requested_by: {
+            $each: [{ requestId, capacityRequired: request.capacity }]
+          },
+          accepted_requests: {
+            $each: [{ requestId, capacityRequired: request.capacity }]
+          },
+          waypoints: {
+            $each: [
+              { latitude: request.start.lat, longitude: request.start.lng }
+              //   { latitude: request.end.lat, longitude: request.end.lng } For destination
+            ]
+          }
+        },
+        $inc: {
+          capacityAvailable: -request.capacity
+        }
+      },
+      { new: true }
+    );
+
+    if (updateJourney) {
+      res.status(200).json({ error: 0, journey: updateJourney });
+    }
   } catch (err) {
     next(err);
   }
