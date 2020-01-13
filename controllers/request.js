@@ -46,3 +46,17 @@ exports.createRequest = async (req, res, next) => {
     next(err);
   }
 };
+
+// Get all requests for a particular user
+exports.getRequestsByUser = async (req, res, next) => {
+  const { userId } = req.query;
+
+  try {
+    const requests = await Request.find({ userId });
+    if (requests.length !== 0) {
+      res.status(200).json({ error: 0, requests });
+    }
+  } catch (err) {
+    next(err);
+  }
+};

@@ -117,3 +117,15 @@ exports.acceptRequest = async (req, res, next) => {
     next(err);
   }
 };
+
+// Get all journeys
+exports.getAllJourneys = async (req, res, next) => {
+  try {
+    const journeys = await Journey.find({});
+    if (journeys.length !== 0) {
+      res.status(200).json({ error: 0, journeys });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
