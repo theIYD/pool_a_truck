@@ -59,24 +59,26 @@ googleMapsClient
       }
     });
 
-    return googleMapsClient
-      .distanceMatrix({
-        origins: `${result.lat},${result.long}`,
-        destinations:
-          "K. J. Somaiya Institute of Engineering and Information Technology",
-        mode: "driving"
-      })
-      .asPromise();
-
-    // // Recomputes the best route by including the above `result` point as the waypoint
     // return googleMapsClient
-    //   .directions({
-    //     origin: "Marol, Church Rd",
-    //     destination:
+    //   .distanceMatrix({
+    //     origins: `${result.lat},${result.long}`,
+    //     destinations:
     //       "K. J. Somaiya Institute of Engineering and Information Technology",
-    //     waypoints: [{ latitude: result.lat, longitude: result.long }]
+    //     mode: "driving"
     //   })
     //   .asPromise();
+
+    // Recomputes the best route by including the above `result` point as the waypoint
+    return googleMapsClient
+      .directions({
+        origin: "Marol, Church Rd",
+        destination:
+          "K. J. Somaiya Institute of Engineering and Information Technology",
+        waypoints: [{ latitude: result.lat, longitude: result.long }],
+        departure_time: new Date("2020-01-20"),
+        traffic_model: "pessimistic"
+      })
+      .asPromise();
   })
   .then(response => {
     console.log(

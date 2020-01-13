@@ -83,7 +83,8 @@ FormData:
 - destLat
 - destLng
 - capacity
-- departure
+- departureStart (Date)
+- departureEnd (Date)
 
 Params:
 - userId
