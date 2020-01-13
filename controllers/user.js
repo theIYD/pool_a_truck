@@ -1,5 +1,6 @@
 const User = require("../models/User");
 
+// Create a user
 exports.createUser = async (req, res, next) => {
   try {
     const newUser = new User({
@@ -16,6 +17,7 @@ exports.createUser = async (req, res, next) => {
   }
 };
 
+// Log in a user
 exports.login = async (req, res, next) => {
   const { phone } = req.body;
   try {

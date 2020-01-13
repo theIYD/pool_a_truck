@@ -4,6 +4,7 @@ const moment = require("moment");
 const Journey = require("../models/Journey");
 const distance = require("../helpers/distance");
 
+// Create a new journey
 exports.createJourney = async (req, res, next) => {
   const { vehicleId, userId } = req.query;
   const newJourney = new Journey({
@@ -18,7 +19,9 @@ exports.createJourney = async (req, res, next) => {
     },
     vehicle: mongoose.Types.ObjectId(vehicleId),
     capacityAvailable: req.body.capacityAvailable,
-    departure: moment(req.body.departure).format("x"),
+    departure: moment(req.body.departure)
+      .utc()
+      .format(),
     polyline: req.body.polyline
   });
 
@@ -35,11 +38,18 @@ exports.createJourney = async (req, res, next) => {
 // Get best journeys
 exports.getBestJourneys = async (req, res, next) => {
   const capacityRequired = req.body.capacityRequired;
+  const departureStart = moment(req.body.departureStart).utc();
+  const departureEnd = moment(req.body.departureEnd).utc();
+  console.log(departureStart, departureEnd);
 
   try {
     const findJourneys = await Journey.find({
       capacityAvailable: {
         $gte: capacityRequired
+      },
+      departure: {
+        $gte: departureStart,
+        $lte: departureEnd
       }
     });
 
