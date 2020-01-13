@@ -30,6 +30,22 @@ FormData:
 Gets a list of journeys near the source location of the farmer
 ```
 
+#### `GET /journeys/all`
+
+```
+Gets a list of all the journeys in the database
+```
+
+#### `POST /journey/accept`
+
+```
+Params:
+- journeyId
+- requestId
+
+Accept the request for a particular journey
+```
+
 #### `POST /user`
 
 ```
@@ -73,4 +89,13 @@ Params:
 - userId
 
 Registers a new request to the db
+```
+
+#### `GET /requests`
+
+```
+Params:
+- userId
+
+Gets a list of requests for a particular user
 ```
