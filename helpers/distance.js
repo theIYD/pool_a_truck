@@ -39,5 +39,10 @@ module.exports = (journeys, source, dest) => {
     }
   });
 
-  return finalLocations;
+  finalLocations.sort((a, b) => {
+    if (a.distance < b.distance) return 1;
+    else return -1;
+  });
+  console.log(finalLocations);
+  return finalLocations[0];
 };

@@ -53,7 +53,7 @@ exports.createRequest = async (req, res, next) => {
           { lat: destLat, lng: destLng }
         );
         console.log(result);
-        if (result.length === 0) {
+        if (!result) {
           return res
             .status(200)
             .json({ error: 0, message: "No closest journeys found near you" });
@@ -101,7 +101,7 @@ exports.createRequest = async (req, res, next) => {
                     },
                     {
                       $push: {
-                        journeys: mongoose.Types.ObjectId(journey._id)
+                        journeys: mongoose.Types.ObjectId(result.journey._id)
                       }
                     },
                     { new: true }
