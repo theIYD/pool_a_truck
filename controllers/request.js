@@ -5,6 +5,7 @@ const User = require("../models/User");
 const Request = require("../models/Request");
 const Journey = require("../models/Journey");
 
+const distance = require("../helpers/distance");
 // Create a new request
 exports.createRequest = async (req, res, next) => {
   const {
@@ -39,80 +40,95 @@ exports.createRequest = async (req, res, next) => {
     const saveRequest = await newRequest.save();
     if (saveRequest) {
       // 1. Find journeys having their creation date less than departure date of this request
-      const journey = await Journey.findOne({
+      const journey = await Journey.find({
         created_at: {
           $lt: saveRequest.departure.start
         }
       });
 
       if (journey) {
-        const requestId = saveRequest._id;
-        const journeyToBeUpdated = await Journey.findOne({ _id: journey._id });
-        if (journeyToBeUpdated) {
-          journeyToBeUpdated.capacityAvailable -= saveRequest.capacity;
-          if (journeyToBeUpdated.capacityAvailable > 0) {
-            const saveJourney = await journeyToBeUpdated.save();
-            if (saveJourney) {
-              const updateJourney = await Journey.findOneAndUpdate(
-                { _id: journey._id },
-                {
-                  $push: {
-                    requested_by: {
-                      $each: [
-                        { requestId, capacityRequired: saveRequest.capacity }
-                      ]
-                    },
-                    accepted_requests: {
-                      $each: [
-                        { requestId, capacityRequired: saveRequest.capacity }
-                      ]
-                    },
-                    waypoints: {
-                      $each: [
-                        {
-                          latitude: saveRequest.start.lat,
-                          longitude: saveRequest.start.lng
-                        }
-                        //   { latitude: request.end.lat, longitude: request.end.lng } For drop-off point before the journey destination
-                      ]
-                    }
-                  }
-                },
-                { new: true }
-              );
-              if (updateJourney) {
-                const updateJourneyOfUser = await User.findOneAndUpdate(
-                  {
-                    _id: saveRequest.userId
-                  },
+        let result = distance(
+          journey,
+          { lat: sourceLat, lng: sourceLng },
+          { lat: destLat, lng: destLng }
+        );
+
+        if (result.length === 0) {
+          return res
+            .status(200)
+            .json({ error: 0, message: "No closest journeys found near you" });
+        } else {
+          const requestId = saveRequest._id;
+          const journeyToBeUpdated = await Journey.findOne({
+            _id: journey._id
+          });
+          if (journeyToBeUpdated) {
+            journeyToBeUpdated.capacityAvailable -= saveRequest.capacity;
+            if (journeyToBeUpdated.capacityAvailable > 0) {
+              const saveJourney = await journeyToBeUpdated.save();
+              if (saveJourney) {
+                const updateJourney = await Journey.findOneAndUpdate(
+                  { _id: journey._id },
                   {
                     $push: {
-                      journeys: mongoose.Types.ObjectId(journey._id)
+                      requested_by: {
+                        $each: [
+                          { requestId, capacityRequired: saveRequest.capacity }
+                        ]
+                      },
+                      accepted_requests: {
+                        $each: [
+                          { requestId, capacityRequired: saveRequest.capacity }
+                        ]
+                      },
+                      waypoints: {
+                        $each: [
+                          {
+                            latitude: saveRequest.start.lat,
+                            longitude: saveRequest.start.lng
+                          }
+                          //   { latitude: request.end.lat, longitude: request.end.lng } For drop-off point before the journey destination
+                        ]
+                      }
                     }
                   },
                   { new: true }
                 );
+                if (updateJourney) {
+                  const updateJourneyOfUser = await User.findOneAndUpdate(
+                    {
+                      _id: saveRequest.userId
+                    },
+                    {
+                      $push: {
+                        journeys: mongoose.Types.ObjectId(journey._id)
+                      }
+                    },
+                    { new: true }
+                  );
 
-                if (updateJourneyOfUser) {
-                  return res
-                    .status(200)
-                    .json({ error: 0, message: "Request registered" });
+                  if (updateJourneyOfUser) {
+                    return res.status(200).json({
+                      error: 0,
+                      message:
+                        "Request registered and was assigned the closest journey",
+                      journeyId: journey._id
+                    });
+                  }
                 }
               }
+            } else {
+              return res
+                .status(200)
+                .json({ error: 1, message: "Capacity is going negative" });
             }
-          } else {
-            return res
-              .status(200)
-              .json({ error: 1, message: "Capacity is going negative" });
           }
         }
       } else {
-        return res
-          .status(200)
-          .json({
-            error: 0,
-            message: "No journey assigned yet, request is on wait !"
-          });
+        return res.status(200).json({
+          error: 0,
+          message: "No journey assigned yet, request is on wait !"
+        });
       }
     }
   } catch (err) {
