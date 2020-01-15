@@ -15,7 +15,11 @@ exports.createRequest = async (req, res, next) => {
     departureEnd
   } = req.body;
   const { userId } = req.query;
-
+  console.log(
+    moment(departureStart, "YYYY-MM-DD"),
+    moment(departureEnd, "YYYY-MM-DD"),
+    moment().toString()
+  );
   try {
     const newRequest = new Request({
       userId: mongoose.Types.ObjectId(userId),
@@ -29,8 +33,8 @@ exports.createRequest = async (req, res, next) => {
       },
       capacity,
       departure: {
-        start: moment(departureStart).format("x"),
-        end: moment(departureEnd).format("x")
+        start: moment(departureStart).format("YYYY-MM-DD"),
+        end: moment(departureEnd).format("YYYY-MM-DD")
       }
     });
 
