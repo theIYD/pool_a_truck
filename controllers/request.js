@@ -46,7 +46,7 @@ exports.createRequest = async (req, res, next) => {
         }
       });
 
-      if (journey) {
+      if (journey.length !== 0) {
         let result = distance(
           journey,
           { lat: sourceLat, lng: sourceLng },
@@ -108,12 +108,16 @@ exports.createRequest = async (req, res, next) => {
                   );
 
                   if (updateJourneyOfUser) {
-                    return res.status(200).json({
-                      error: 0,
-                      message:
-                        "Request registered and was assigned the closest journey",
-                      journeyId: journey._id
-                    });
+                    saveRequest.journeyId = journey._id;
+                    const updateJourneyIdInRequest = await saveRequest.save();
+                    if (updateJourneyIdInRequest) {
+                      return res.status(200).json({
+                        error: 0,
+                        message:
+                          "Request registered and was assigned the closest journey",
+                        journeyId: journey._id
+                      });
+                    }
                   }
                 }
               }
@@ -141,7 +145,7 @@ exports.getRequestsByUser = async (req, res, next) => {
   const { userId } = req.query;
 
   try {
-    const requests = await Request.find({ userId });
+    const requests = await Request.find({ userId }).populate('journeyId');
     if (requests.length !== 0) {
       res.status(200).json({ error: 0, requests });
     }

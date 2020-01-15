@@ -77,6 +77,7 @@ exports.acceptRequest = async (req, res, next) => {
 
 // Get all journeys
 exports.getAllJourneys = async (req, res, next) => {
+  const { userId } = req.query;
   try {
     const journeys = await Journey.find({});
     if (journeys.length !== 0) {

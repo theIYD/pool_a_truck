@@ -26,13 +26,14 @@ module.exports = (journeys, source, dest) => {
 
     // Find the minimum distance under 1000 metres
     distanceArr.forEach(obj => {
-      if (result.distance > obj.distance && obj.distance < 1000) {
+      if (result.distance > obj.distance && obj.distance < 10000) {
         // console.log(obj.distance);
         result.lat = obj.location.latitude;
         result.long = obj.location.longitude;
         result.distance = obj.distance;
       }
     });
+    console.log(result);
     if (result.lat !== 0 && result.lng !== 0 && result.distance !== null) {
       finalLocations.push({ journey, via: result });
     }
