@@ -21,9 +21,7 @@ exports.createJourney = async (req, res, next) => {
     },
     vehicle: mongoose.Types.ObjectId(vehicleId),
     capacityAvailable: req.body.capacityAvailable,
-    departure: moment(req.body.departure)
-      .utc()
-      .format(),
+    departure: moment(req.body.departure).format("YYYY-MM-DD"),
     polyline: req.body.polyline
   });
 
@@ -72,47 +70,6 @@ exports.acceptRequest = async (req, res, next) => {
   const { requestId, journeyId } = req.query;
 
   try {
-    const request = await Request.findById(requestId);
-    const updateJourney = await Journey.findOneAndUpdate(
-      { _id: journeyId },
-      {
-        $push: {
-          requested_by: {
-            $each: [{ requestId, capacityRequired: request.capacity }]
-          },
-          accepted_requests: {
-            $each: [{ requestId, capacityRequired: request.capacity }]
-          },
-          waypoints: {
-            $each: [
-              { latitude: request.start.lat, longitude: request.start.lng }
-              //   { latitude: request.end.lat, longitude: request.end.lng } For drop-off point before the journey destination
-            ]
-          }
-        },
-        $inc: {
-          capacityAvailable: -request.capacity
-        }
-      },
-      { new: true }
-    );
-
-    if (updateJourney) {
-      const updateJourneyOfUser = await User.findOneAndUpdate(
-        {
-          _id: request.userId
-        },
-        {
-          $push: {
-            journeys: mongoose.Types.ObjectId(journeyId)
-          }
-        },
-        { new: true }
-      );
-      if (updateJourneyOfUser) {
-        res.status(200).json({ error: 0, journey: updateJourney });
-      }
-    }
   } catch (err) {
     next(err);
   }
