@@ -52,7 +52,7 @@ exports.createRequest = async (req, res, next) => {
           { lat: sourceLat, lng: sourceLng },
           { lat: destLat, lng: destLng }
         );
-
+        console.log(result);
         if (result.length === 0) {
           return res
             .status(200)
@@ -60,7 +60,7 @@ exports.createRequest = async (req, res, next) => {
         } else {
           const requestId = saveRequest._id;
           const journeyToBeUpdated = await Journey.findOne({
-            _id: journey._id
+            _id: result.journey._id
           });
           if (journeyToBeUpdated) {
             journeyToBeUpdated.capacityAvailable -= saveRequest.capacity;
@@ -68,7 +68,7 @@ exports.createRequest = async (req, res, next) => {
               const saveJourney = await journeyToBeUpdated.save();
               if (saveJourney) {
                 const updateJourney = await Journey.findOneAndUpdate(
-                  { _id: journey._id },
+                  { _id: result.journey._id },
                   {
                     $push: {
                       requested_by: {
@@ -108,14 +108,14 @@ exports.createRequest = async (req, res, next) => {
                   );
 
                   if (updateJourneyOfUser) {
-                    saveRequest.journeyId = journey._id;
+                    saveRequest.journeyId = result.journey._id;
                     const updateJourneyIdInRequest = await saveRequest.save();
                     if (updateJourneyIdInRequest) {
                       return res.status(200).json({
                         error: 0,
                         message:
                           "Request registered and was assigned the closest journey",
-                        journeyId: journey._id
+                        journeyId: result.journey._id
                       });
                     }
                   }
@@ -145,7 +145,7 @@ exports.getRequestsByUser = async (req, res, next) => {
   const { userId } = req.query;
 
   try {
-    const requests = await Request.find({ userId }).populate('journeyId');
+    const requests = await Request.find({ userId }).populate("journeyId");
     if (requests.length !== 0) {
       res.status(200).json({ error: 0, requests });
     }

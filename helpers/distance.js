@@ -33,7 +33,7 @@ module.exports = (journeys, source, dest) => {
         result.distance = obj.distance;
       }
     });
-    console.log(result);
+    // console.log(result);
     if (result.lat !== 0 && result.lng !== 0 && result.distance !== null) {
       finalLocations.push({ journey, via: result });
     }
