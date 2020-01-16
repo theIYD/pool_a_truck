@@ -2,13 +2,20 @@ const mongoose = require("mongoose");
 const moment = require("moment");
 
 const Journey = require("../models/Journey");
-const Request = require("../models/Request");
-const User = require("../models/User");
+const Vehicle = require("../models/Vehicle");
 const distance = require("../helpers/distance");
 
 // Create a new journey
 exports.createJourney = async (req, res, next) => {
-  const { vehicleId, userId } = req.query;
+  const { userId } = req.query;
+
+  const { vehicleModel, vehicleLicensePlate } = req.body;
+
+  const newVehicle = new Vehicle({
+    model: vehicleModel,
+    license_plate: vehicleLicensePlate
+  });
+
   const newJourney = new Journey({
     posted_by: mongoose.Types.ObjectId(userId),
     start: {
@@ -19,15 +26,16 @@ exports.createJourney = async (req, res, next) => {
       lat: req.body.destLat,
       lng: req.body.destLng
     },
-    vehicle: mongoose.Types.ObjectId(vehicleId),
+    vehicle: newVehicle._id,
     capacityAvailable: req.body.capacityAvailable,
     departure: moment(req.body.departure).format("YYYY-MM-DD"),
     polyline: req.body.polyline
   });
 
   try {
+    const saveVehicle = await newVehicle.save();
     const saveJourney = await newJourney.save();
-    if (saveJourney) {
+    if (saveJourney && saveVehicle) {
       res.status(201).json({ error: 0, message: "Journey was created" });
     }
   } catch (err) {

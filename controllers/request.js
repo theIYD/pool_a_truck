@@ -146,9 +146,7 @@ exports.getRequestsByUser = async (req, res, next) => {
 
   try {
     const requests = await Request.find({ userId }).populate("journeyId");
-    if (requests.length !== 0) {
-      res.status(200).json({ error: 0, requests });
-    }
+    res.status(200).json({ error: 0, requests });
   } catch (err) {
     next(err);
   }
