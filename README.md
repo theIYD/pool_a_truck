@@ -4,7 +4,6 @@
 
 ```
 Params:
-- vehicleId
 - userId
 
 FormData:
@@ -14,6 +13,8 @@ FormData:
 - destLng
 - capacityAvailable
 - departure
+- vehicleModel
+- vehicleLicensePlate
 - polyline (Received from Directions API on the client)
 
 It creates a new journey of a truck from source to destination. Created by the agency

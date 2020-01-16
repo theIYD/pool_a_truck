@@ -145,7 +145,10 @@ exports.getRequestsByUser = async (req, res, next) => {
   const { userId } = req.query;
 
   try {
-    const requests = await Request.find({ userId }).populate("journeyId");
+    const requests = await Request.find({ userId }).populate({
+      path: "journeyId",
+      populate: { path: "vehicle posted_by", select: "-journeys" }
+    });
     res.status(200).json({ error: 0, requests });
   } catch (err) {
     next(err);
