@@ -50,13 +50,21 @@ exports.createRequest = async (req, res, next) => {
           created_at: {
             $lt: saveRequest.departure.start
           },
+          departure: {
+            $gte: saveRequest.departure.start,
+            $lte: saveRequest.departure.end
+          },
           isPerishable: true,
           isFragile: false
         });
       } else if (saveRequest.isFragile) {
         journey = await Journey.find({
           created_at: {
-            $lt: saveRequest.departure.start
+            $lte: saveRequest.departure.start
+          },
+          departure: {
+            $gte: saveRequest.departure.start,
+            $lte: saveRequest.departure.end
           },
           isPerishable: false,
           isFragile: true
@@ -64,7 +72,11 @@ exports.createRequest = async (req, res, next) => {
       } else if (saveRequest.isFragile && saveRequest.isPerishable) {
         journey = await Journey.find({
           created_at: {
-            $lt: saveRequest.departure.start
+            $lte: saveRequest.departure.start
+          },
+          departure: {
+            $gte: saveRequest.departure.start,
+            $lte: saveRequest.departure.end
           },
           isPerishable: true,
           isFragile: true
@@ -72,7 +84,11 @@ exports.createRequest = async (req, res, next) => {
       } else {
         journey = await Journey.find({
           created_at: {
-            $lt: saveRequest.departure.start
+            $lte: saveRequest.departure.start
+          },
+          departure: {
+            $gte: saveRequest.departure.start,
+            $lte: saveRequest.departure.end
           }
         });
       }
