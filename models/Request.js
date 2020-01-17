@@ -17,6 +17,7 @@ const requestSchema = new Schema({
     end: { type: Date, required: true }
   },
   journeyId: { type: mongoose.Types.ObjectId, ref: "Journey" },
+  isJourney: { type: Boolean, default: false },
   created_at: { type: Date, default: Date.now() }
 });
 

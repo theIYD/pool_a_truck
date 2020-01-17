@@ -109,6 +109,7 @@ exports.createRequest = async (req, res, next) => {
 
                   if (updateJourneyOfUser) {
                     saveRequest.journeyId = result.journey._id;
+                    saveRequest.isJourney = true;
                     const updateJourneyIdInRequest = await saveRequest.save();
                     if (updateJourneyIdInRequest) {
                       return res.status(200).json({
@@ -145,10 +146,12 @@ exports.getRequestsByUser = async (req, res, next) => {
   const { userId } = req.query;
 
   try {
-    const requests = await Request.find({ userId }).populate({
-      path: "journeyId",
-      populate: { path: "vehicle posted_by", select: "-journeys" }
-    });
+    const requests = await Request.find({ userId })
+      .populate({
+        path: "journeyId",
+        populate: { path: "vehicle posted_by", select: "-journeys" }
+      })
+      .sort({ created_at: -1 });
     res.status(200).json({ error: 0, requests });
   } catch (err) {
     next(err);
