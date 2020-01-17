@@ -95,7 +95,9 @@ exports.createRequest = async (req, res, next) => {
           departure: {
             $gte: saveRequest.departure.start,
             $lte: saveRequest.departure.end
-          }
+          },
+          isPerishable: false,
+          isFragile: false
         });
         console.log("No Fragile and No Perishable");
         console.log(journey);
