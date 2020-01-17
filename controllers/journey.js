@@ -9,7 +9,12 @@ const distance = require("../helpers/distance");
 exports.createJourney = async (req, res, next) => {
   const { userId } = req.query;
 
-  const { vehicleModel, vehicleLicensePlate } = req.body;
+  const {
+    vehicleModel,
+    vehicleLicensePlate,
+    isFragile,
+    isPerishable
+  } = req.body;
 
   const newVehicle = new Vehicle({
     model: vehicleModel,
@@ -26,6 +31,8 @@ exports.createJourney = async (req, res, next) => {
       lat: req.body.destLat,
       lng: req.body.destLng
     },
+    isFragile,
+    isPerishable,
     vehicle: newVehicle._id,
     capacityAvailable: req.body.capacityAvailable,
     departure: moment(req.body.departure).format("YYYY-MM-DD"),
@@ -44,7 +51,7 @@ exports.createJourney = async (req, res, next) => {
 };
 
 // Get best journeys
-exports.getBestJourneys = async (req, res, next) => {
+/* exports.getBestJourneys = async (req, res, next) => {
   const capacityRequired = req.body.capacityRequired;
   const departureStart = moment(req.body.departureStart).utc();
   const departureEnd = moment(req.body.departureEnd).utc();
@@ -81,7 +88,7 @@ exports.acceptRequest = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};
+}; */
 
 // Get all journeys
 exports.getAllJourneys = async (req, res, next) => {

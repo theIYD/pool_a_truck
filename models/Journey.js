@@ -11,6 +11,8 @@ const journeySchema = new Schema({
     lat: { type: Number, required: true },
     lng: { type: Number, required: true }
   },
+  isFragile: { type: Boolean, required: true },
+  isPerishable: { type: Boolean, required: true },
   departure: { type: Date, required: true },
   polyline: { type: String, required: true },
   vehicle: { type: mongoose.Types.ObjectId, required: true, ref: "Vehicle" },

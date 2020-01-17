@@ -8,9 +8,9 @@ const requestController = require("../controllers/request");
 
 // Create a journey
 router.route("/journey").post(upload.none(), journeyController.createJourney);
-router
-  .route("/journey/accept")
-  .post(upload.none(), journeyController.acceptRequest);
+// router
+//   .route("/journey/accept")
+//   .post(upload.none(), journeyController.acceptRequest);
 router.route("/journeys").get(upload.none(), journeyController.getAllJourneys);
 
 // Get closest journeys
