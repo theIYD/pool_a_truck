@@ -47,9 +47,9 @@ exports.createRequest = async (req, res, next) => {
       // 1. Find journeys having their creation date less than departure date of this request
       if (saveRequest.isPerishable) {
         journey = await Journey.find({
-          created_at: {
-            $lte: saveRequest.departure.start
-          },
+          // created_at: {
+          //   $lte: saveRequest.departure.start
+          // },
           departure: {
             $gte: saveRequest.departure.start,
             $lte: saveRequest.departure.end
