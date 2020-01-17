@@ -64,10 +64,10 @@ module.exports = (journeys, source, dest) => {
       resultSrc.lng !== 0 &&
       resultSrc.distance !== null &&
       resultDest.lat !== 0 &&
-        resultDest.lng !== 0 &&
-        resultDest.distance !== null
+      resultDest.lng !== 0 &&
+      resultDest.distance !== null
     ) {
-      finalLocations.push({ journey, via: result });
+      finalLocations.push({ journey, via: resultSrc });
     }
   });
 
