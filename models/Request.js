@@ -11,6 +11,8 @@ const requestSchema = new Schema({
     lat: { type: Number, required: true },
     lng: { type: Number, required: true }
   },
+  isFragile: { type: Boolean, required: true },
+  isPerishable: { type: Boolean, required: true },
   capacity: { type: Number, required: true },
   departure: {
     start: { type: Date, required: true },

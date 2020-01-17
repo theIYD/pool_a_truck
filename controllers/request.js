@@ -15,7 +15,9 @@ exports.createRequest = async (req, res, next) => {
     destLng,
     capacity,
     departureStart,
-    departureEnd
+    departureEnd,
+    isPerishable,
+    isFragile
   } = req.body;
 
   const { userId } = req.query;
@@ -31,6 +33,8 @@ exports.createRequest = async (req, res, next) => {
         lng: destLng
       },
       capacity,
+      isFragile,
+      isPerishable,
       departure: {
         start: new Date(departureStart),
         end: new Date(departureEnd)
