@@ -89,7 +89,12 @@ exports.getAllJourneys = async (req, res, next) => {
   try {
     const journeys = await Journey.find({ posted_by: userId })
       .populate("vehicle")
-      .select("-requested_by -accepted_requests")
+      .populate({
+        path: "accepted_requests.requestId",
+        select: "-journeyId -start -end -_id -capacity",
+        populate: { path: "userId", select: "-journeys -created_at" }
+      })
+      .select("-requested_by")
       .sort({ created_at: -1 });
     res.status(200).json({ error: 0, journeys });
   } catch (err) {
