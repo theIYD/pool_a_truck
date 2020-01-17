@@ -57,6 +57,8 @@ exports.createRequest = async (req, res, next) => {
           isPerishable: true,
           isFragile: false
         });
+        console.log("IsPerishable");
+        console.log(journey);
       } else if (saveRequest.isFragile) {
         journey = await Journey.find({
           created_at: {
@@ -69,6 +71,8 @@ exports.createRequest = async (req, res, next) => {
           isPerishable: false,
           isFragile: true
         });
+        console.log("isFragile");
+        console.log(journey);
       } else if (saveRequest.isFragile && saveRequest.isPerishable) {
         journey = await Journey.find({
           created_at: {
@@ -81,6 +85,8 @@ exports.createRequest = async (req, res, next) => {
           isPerishable: true,
           isFragile: true
         });
+        console.log("IsPerishable and IsFragile");
+        console.log(journey);
       } else {
         journey = await Journey.find({
           created_at: {
@@ -91,6 +97,8 @@ exports.createRequest = async (req, res, next) => {
             $lte: saveRequest.departure.end
           }
         });
+        console.log("No Fragile and No Perishable");
+        console.log(journey);
       }
 
       if (journey.length !== 0) {
