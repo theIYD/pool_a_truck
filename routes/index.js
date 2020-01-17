@@ -11,12 +11,10 @@ router.route("/journey").post(upload.none(), journeyController.createJourney);
 router
   .route("/journey/accept")
   .post(upload.none(), journeyController.acceptRequest);
-router
-  .route("/journeys/all")
-  .get(upload.none(), journeyController.getAllJourneys);
+router.route("/journeys").get(upload.none(), journeyController.getAllJourneys);
 
 // Get closest journeys
-router.route("/journeys").get(upload.none(), journeyController.getBestJourneys);
+// router.route("/journeys").get(upload.none(), journeyController.getBestJourneys);
 
 // Create a new user
 router.route("/user").post(upload.none(), userController.createUser);

@@ -87,10 +87,11 @@ exports.acceptRequest = async (req, res, next) => {
 exports.getAllJourneys = async (req, res, next) => {
   const { userId } = req.query;
   try {
-    const journeys = await Journey.find({});
-    if (journeys.length !== 0) {
-      res.status(200).json({ error: 0, journeys });
-    }
+    const journeys = await Journey.find({ posted_by: userId })
+      .populate("vehicle")
+      .select("-requested_by -accepted_requests")
+      .sort({ created_at: -1 });
+    res.status(200).json({ error: 0, journeys });
   } catch (err) {
     next(err);
   }
