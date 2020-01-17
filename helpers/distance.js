@@ -75,6 +75,6 @@ module.exports = (journeys, source, dest) => {
     if (a.distance < b.distance) return 1;
     else return -1;
   });
-  console.log(finalLocations);
+  // console.log(finalLocations);
   return finalLocations[0];
 };

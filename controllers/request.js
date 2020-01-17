@@ -48,7 +48,7 @@ exports.createRequest = async (req, res, next) => {
       if (saveRequest.isPerishable) {
         journey = await Journey.find({
           created_at: {
-            $lt: saveRequest.departure.start
+            $lte: saveRequest.departure.start
           },
           departure: {
             $gte: saveRequest.departure.start,
