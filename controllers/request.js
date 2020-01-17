@@ -43,12 +43,39 @@ exports.createRequest = async (req, res, next) => {
 
     const saveRequest = await newRequest.save();
     if (saveRequest) {
+      let journey = null;
       // 1. Find journeys having their creation date less than departure date of this request
-      const journey = await Journey.find({
-        created_at: {
-          $lt: saveRequest.departure.start
-        }
-      });
+      if (saveRequest.isPerishable) {
+        journey = await Journey.find({
+          created_at: {
+            $lt: saveRequest.departure.start
+          },
+          isPerishable: true,
+          isFragile: false
+        });
+      } else if (saveRequest.isFragile) {
+        journey = await Journey.find({
+          created_at: {
+            $lt: saveRequest.departure.start
+          },
+          isPerishable: false,
+          isFragile: true
+        });
+      } else if (saveRequest.isFragile && saveRequest.isPerishable) {
+        journey = await Journey.find({
+          created_at: {
+            $lt: saveRequest.departure.start
+          },
+          isPerishable: true,
+          isFragile: true
+        });
+      } else {
+        journey = await Journey.find({
+          created_at: {
+            $lt: saveRequest.departure.start
+          }
+        });
+      }
 
       if (journey.length !== 0) {
         let result = distance(
