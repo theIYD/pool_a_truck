@@ -98,7 +98,7 @@ exports.getAllJourneys = async (req, res, next) => {
       .populate("vehicle")
       .populate({
         path: "accepted_requests.requestId",
-        select: "-journeyId -start -end -_id -capacity",
+        select: "-journeyId -_id -capacity",
         populate: { path: "userId", select: "-journeys -created_at" }
       })
       .select("-requested_by")

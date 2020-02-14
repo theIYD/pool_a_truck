@@ -18,6 +18,8 @@
   "homepage": "https://github.com/theIYD/pool_a_truck#readme",
   "dependencies": {
     "@google/maps": "^1.0.2",
+    "axios": "^0.19.2",
+    "cheerio": "^1.0.0-rc.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "google-maps-polyutil": "^1.0.3",
